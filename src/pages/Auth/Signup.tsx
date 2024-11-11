@@ -17,19 +17,18 @@ const Signup: React.FC = () => {
                 },
                 {
                     headers: {
-                        'Content-Type': 'application/json',  // JSON 형식으로 요청
+                        'Content-Type': 'application/json',
                     }
                 }
             );
-            // 성공적으로 요청이 처리된 후 할 작업
-            console.log('Signup successful:', response.data);
+            localStorage.setItem("token", response.data.token);
             navigate('/auth/login');
         } catch (error) {
             if (error.response) {
-                console.error('Error:', error.response.data); // 서버에서 보낸 에러 메시지
-                console.error('Status code:', error.response.status); // HTTP 상태 코드
+                console.error('Error:', error.response.data);
+                console.error('Status code:', error.response.status);
             } else {
-                console.error('Signup failed:', error.message); // 서버 연결 문제 등
+                console.error('Signup failed:', error.message);
             }
         }
 
