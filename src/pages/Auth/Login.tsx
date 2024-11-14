@@ -1,38 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AuthForm from './AuthForm';
+import { API_ROUTES } from '../../config/apiConfig';
 
 const Login: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            navigate('/');
-        }
-    }, [navigate]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleLogin = async (email: string, password: string) => {
         try {
-            const response = await axios.post(`http://localhost:8080/auth/login`, { email, password });
+            const response = await axios.post(API_ROUTES.USER_LOGIN, { email, password });
             localStorage.setItem('token', response.data.token);
             navigate('/');
         } catch (error) {
+            // TODO: 에러핸들링
             console.error('Login failed:', error);
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-            <button type="submit">Login</button>
-        </form>
-    );
+    return <AuthForm onSubmit={handleLogin} title="Login" buttonText="Login" />;
 };
 
 export default Login;

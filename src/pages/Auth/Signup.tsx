@@ -1,64 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { validateEmail, validatePassword } from '../../util/Auth';
+import AuthForm from './AuthForm';
+import { API_ROUTES } from '../../config/apiConfig';
 
 const Signup: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [isButtonEnabled, setIsButtonEnabled] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSignup = async (email: string, password: string) => {
         try {
-            const response = await axios.post('http://localhost:8080/users/create',
-                {
-                    email: email,
-                    password: password,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }
-            );
-            localStorage.setItem("token", response.data.token);
+            const response = await axios.post(API_ROUTES.USER_CREATE, { email, password });
+            localStorage.setItem('token', response.data.token);
             navigate('/auth/login');
         } catch (error) {
-            if (error.response) {
-                console.error('Error:', error.response.data);
-                console.error('Status code:', error.response.status);
-            } else {
-                console.error('Signup failed:', error.message);
-            }
+            // TODO: 에러핸들링
+            console.error('Signup failed:', error);
         }
     };
 
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newEmail = e.target.value;
-        setEmail(newEmail);
-        checkFormValidity(newEmail, password);
-    };
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-        checkFormValidity(email, newPassword);
-    };
-
-    const checkFormValidity = (email: string, password: string) => {
-        const isFormValid = validateEmail(email) && validatePassword(password);
-        setIsButtonEnabled(isFormValid);
-    };
-    return (
-        <form onSubmit={handleSubmit}>
-            <h2>Signup</h2>
-            <input type="email" value={email} onChange={(e) => handleEmailChange(e)} placeholder="Email" required />
-            <input type="password" value={password} onChange={(e) => handlePasswordChange(e)} placeholder="Password" required />
-            <button type="submit" disabled={!isButtonEnabled}>Signup</button>
-        </form>
-    );
+    return <AuthForm onSubmit={handleSignup} title="Signup" buttonText="Signup" />;
 };
 
 export default Signup;
