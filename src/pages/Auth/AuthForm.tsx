@@ -1,5 +1,5 @@
 import React from 'react';
-import { validateEmail, validatePassword } from '../../util/Auth';
+import { validateEmail, validatePassword } from '../../util/authHelper';
 
 interface AuthFormProps {
     onSubmit: (email: string, password: string) => void;
