@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthForm from './AuthForm';
@@ -6,7 +6,11 @@ import { API_ROUTES } from '../../config/apiConfig';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
-
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/');
+        }
+    }, [navigate]);
     const handleLogin = async (email: string, password: string) => {
         try {
             const response = await axios.post(API_ROUTES.USER_LOGIN, { email, password });
