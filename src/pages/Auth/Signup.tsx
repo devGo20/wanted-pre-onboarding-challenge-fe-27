@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthForm from './AuthForm';
 import { API_ROUTES } from '../../config/apiConfig';
+import { toast } from 'react-toastify';
 
 const Signup: React.FC = () => {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Signup: React.FC = () => {
             localStorage.setItem('token', response.data.token);
             navigate('/auth/login');
         } catch (error) {
-            // TODO: 에러핸들링
+            toast.error(error.response?.data?.details || 'Signup failed');
             console.error('Signup failed:', error);
         }
     };
