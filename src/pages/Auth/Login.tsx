@@ -6,24 +6,24 @@ import { API_ROUTES } from '../../config/apiConfig';
 import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            navigate('/');
-        }
-    }, [navigate]);
-    const handleLogin = async (email: string, password: string) => {
-        try {
-            const response = await axios.post(API_ROUTES.USER_LOGIN, { email, password });
-            localStorage.setItem('token', response.data.token);
-            navigate('/');
-        } catch (error) {
-            toast.error(error.response?.data?.details || 'Login failed');
-            console.error('Login failed:', error);
-        }
-    };
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/');
+    }
+  }, [navigate]);
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const response = await axios.post(API_ROUTES.USER_LOGIN, { email, password });
+      localStorage.setItem('token', response.data.token);
+      navigate('/');
+    } catch (error) {
+      toast.error(error.response?.data?.details || 'Login failed');
+      console.error('Login failed:', error);
+    }
+  };
 
-    return <AuthForm onSubmit={handleLogin} title="Login" buttonText="Login" />;
+  return <AuthForm onSubmit={handleLogin} title="Login" buttonText="Login" />;
 };
 
 export default Login;
