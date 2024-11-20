@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_ROUTES } from '../../config/apiConfig';
 import { toast } from 'react-toastify';
-interface Todo {
+import { useNavigate } from 'react-router-dom';
+export interface Todo {
   id: string;
   title: string;
   content: string;
@@ -15,12 +16,12 @@ const TodoList = () => {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [updateTitle, setUpdateTitle] = useState<string>('');
   const [updateContent, setUpdateContent] = useState<string>('');
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await axios.get(API_ROUTES.TODO_LIST, {
+        const response = await axios.get(API_ROUTES.TODO, {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
@@ -35,7 +36,7 @@ const TodoList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`${API_ROUTES.TODO_LIST}/${id}`, {
+      await axios.delete(`${API_ROUTES.TODO}/${id}`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         }
@@ -54,7 +55,7 @@ const TodoList = () => {
 
     try {
       const response = await axios.post(
-        API_ROUTES.TODO_CREATE,
+        API_ROUTES.TODO,
         {
           title: updateTitle,
           content: updateContent,
@@ -85,7 +86,7 @@ const TodoList = () => {
   const handleSaveClick = async () => {
     if (updatingId) {
       try {
-        const response = await axios.put(`${API_ROUTES.TODO_UPDATE}/${updatingId}`, {
+        const response = await axios.put(`${API_ROUTES.TODO}/${updatingId}`, {
           title: updateTitle,
           content: updateContent,
         }, {
@@ -116,6 +117,10 @@ const TodoList = () => {
     setUpdatingId(null);
     setUpdateTitle('');
     setUpdateContent('');
+  };
+
+  const handleTodoClick = (id: string) => {
+    navigate(`/todos/${id}`); // /todos/:id 경로로 이동
   };
 
   return (
@@ -157,7 +162,7 @@ const TodoList = () => {
                 <button onClick={handleCancelClick}>Cancel</button>
               </div>
             ) : (
-              <div>
+              <div onClick={() => handleTodoClick(todo.id)}>
                 <h3>{todo.title}</h3>
                 <p>{todo.content}</p>
                 <button onClick={() => handleEditClick(todo)}>Edit</button>
