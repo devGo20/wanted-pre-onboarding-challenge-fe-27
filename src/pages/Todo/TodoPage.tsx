@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import TodoList from './TodoList';
 import TodoDetail from './TodoDetail';
 import { useState, useEffect } from 'react';
@@ -14,7 +14,9 @@ export interface Todo {
 
 const TodoPage = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const { id } = useParams();
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const match = useMatch('/todos/:id');
+  const id = match?.params?.id;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,8 +34,18 @@ const TodoPage = () => {
     fetchTodos();
   }, []);
 
-  const handleSelectTodo = (todoId: string) => {
-    navigate(`/todos/${todoId}`);
+  useEffect(() => {
+    if (id) {
+      const todo = todos.find((todo) => todo.id === id);
+      if (todo) {
+        setSelectedTodo(todo);
+      }
+    }
+  }, [id, todos]);
+
+  const handleSelectTodo = (todo: Todo) => {
+    setSelectedTodo(todo);
+    navigate(`/todos/${todo.id}`);
   };
 
   const handleAddTodo = async (title: string, content: string) => {
@@ -58,6 +70,7 @@ const TodoPage = () => {
         onAddTodo={handleAddTodo}
         onUpdateTodo={handleUpdateTodo}
         onDeleteTodo={handleDeleteTodo} />
+      {selectedTodo && <TodoDetail selectedTodo={selectedTodo} />}
     </div>
   );
 };
