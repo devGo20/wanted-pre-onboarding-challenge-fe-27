@@ -5,7 +5,7 @@ import { checkValidation } from '../../util/todoHelper';
 
 interface TodoListProps {
   todos: Todo[];
-  onSelectTodo: (id: string) => void;
+  onSelectTodo: (todo: Todo) => void;
   onDeleteTodo: (id: string) => Promise<void>;
   onAddTodo: (title: string, content: string) => Promise<void>;
   onUpdateTodo: (id: string, title: string, content: string) => Promise<void>;
@@ -16,7 +16,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, 
   const [updatingId, setUpdatingId] = useState<string>('');
   const [updateTitle, setUpdateTitle] = useState<string>('');
   const [updateContent, setUpdateContent] = useState<string>('');
-
+  console.log('list');
   const handleDelete = async (id: string) => {
     try {
       await onDeleteTodo(id);
@@ -113,7 +113,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, 
                 <button onClick={handleCancelClick}>Cancel</button>
               </div>
             ) : (
-              <div onClick={() => onSelectTodo(todo.id)}>
+              <div onClick={() => onSelectTodo(todo)}>
                 <h3>{todo.title}</h3>
                 <p>{todo.content}</p>
                 <button onClick={() => handleEditClick(todo)}>Edit</button>
