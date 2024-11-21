@@ -4,8 +4,7 @@ import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/Signup';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import TodoList from './pages/Todo/TodoList';
-import TodoDetail from './pages/Todo/TodoDetail';
+import TodoPage from './pages/Todo/TodoPage';
 
 function App() {
   return (
@@ -13,8 +12,7 @@ function App() {
       <Routes>
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/todos" element={<TodoList />} />
-        <Route path="/todos/:id" element={<TodoDetail />} />
+        <Route path="/todos/*" element={<TodoPage />} />
       </Routes>
       <ToastContainer
         position="bottom-center"
