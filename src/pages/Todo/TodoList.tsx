@@ -1,72 +1,38 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_ROUTES } from '../../config/apiConfig';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-export interface Todo {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
+import { Todo } from './TodoPage';
+import { checkValidation } from '../../util/todoHelper';
+
+interface TodoListProps {
+  todos: Todo[];
+  onSelectTodo: (id: string) => void;
+  onDeleteTodo: (id: string) => Promise<void>;
+  onAddTodo: (title: string, content: string) => Promise<void>;
+  onUpdateTodo: (id: string, title: string, content: string) => Promise<void>;
 }
-const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+
+const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, onAddTodo, onUpdateTodo }) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string>('');
   const [updateTitle, setUpdateTitle] = useState<string>('');
   const [updateContent, setUpdateContent] = useState<string>('');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const response = await axios.get(API_ROUTES.TODO, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
-        setTodos(response.data.data);
-      } catch (error) {
-        console.error('Error fetching todos:', error);
-      }
-    };
-    fetchTodos();
-  }, []);
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`${API_ROUTES.TODO}/${id}`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        }
-      });
-      setTodos(todos.filter((todo) => todo.id !== id));
+      await onDeleteTodo(id);
       toast.success('삭제되었습니다.');
     } catch (error) {
       console.error('Error deleting todo:', error);
     }
   };
+
   const handleAddTodo = async () => {
-    if (!updateTitle.trim() || !updateContent.trim()) {
+    if (checkValidation(updateTitle, updateContent)) {
       alert('할 일을 입력해주세요!');
       return;
     }
-
     try {
-      const response = await axios.post(
-        API_ROUTES.TODO,
-        {
-          title: updateTitle,
-          content: updateContent,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        }
-      );
-      setTodos([...todos, response.data.data]);
+      await onAddTodo(updateTitle, updateContent);
       resetUpdateState();
       setIsAdding(false);
       toast.success('Todo가 추가되었습니다!');
@@ -83,29 +49,18 @@ const TodoList = () => {
     setIsAdding(false);
   };
 
-  const handleSaveClick = async () => {
-    if (updatingId) {
-      try {
-        const response = await axios.put(`${API_ROUTES.TODO}/${updatingId}`, {
-          title: updateTitle,
-          content: updateContent,
-        }, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
-
-        setTodos(todos.map(todo =>
-          todo.id === updatingId
-            ? { ...todo, ...response.data.data }
-            : todo
-        ));
-        resetUpdateState();
-        toast.success('Todo updated successfully!');
-      } catch (error) {
-        toast.error('Failed to update Todo.');
-        console.error(error);
-      }
+  const handleUpdateSaveClick = async () => {
+    if (checkValidation(updateTitle, updateContent)) {
+      alert('할 일을 입력해주세요!');
+      return;
+    }
+    try {
+      await onUpdateTodo(updatingId, updateTitle, updateContent);
+      resetUpdateState();
+      toast.success('Todo updated successfully!');
+    } catch (error) {
+      toast.error('Failed to update Todo.');
+      console.error(error);
     }
   };
 
@@ -114,13 +69,9 @@ const TodoList = () => {
   };
 
   const resetUpdateState = () => {
-    setUpdatingId(null);
+    setUpdatingId('');
     setUpdateTitle('');
     setUpdateContent('');
-  };
-
-  const handleTodoClick = (id: string) => {
-    navigate(`/todos/${id}`); // /todos/:id 경로로 이동
   };
 
   return (
@@ -158,11 +109,11 @@ const TodoList = () => {
                   value={updateContent}
                   onChange={(e) => setUpdateContent(e.target.value)}
                 />
-                <button onClick={handleSaveClick}>Save</button>
+                <button onClick={handleUpdateSaveClick}>Save</button>
                 <button onClick={handleCancelClick}>Cancel</button>
               </div>
             ) : (
-              <div onClick={() => handleTodoClick(todo.id)}>
+              <div onClick={() => onSelectTodo(todo.id)}>
                 <h3>{todo.title}</h3>
                 <p>{todo.content}</p>
                 <button onClick={() => handleEditClick(todo)}>Edit</button>
