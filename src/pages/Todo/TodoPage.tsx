@@ -40,6 +40,8 @@ const TodoPage = () => {
       if (todo) {
         setSelectedTodo(todo);
       }
+    } else {
+      setSelectedTodo(null);
     }
   }, [id, todos]);
 
