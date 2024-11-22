@@ -6,35 +6,22 @@ import { checkValidation } from '../../util/todoHelper';
 interface TodoListProps {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
-  onDeleteTodo: (id: string) => Promise<void>;
   onAddTodo: (title: string, content: string) => Promise<void>;
-  onUpdateTodo: (id: string, title: string, content: string) => Promise<void>;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, onAddTodo, onUpdateTodo }) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onAddTodo }) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [updatingId, setUpdatingId] = useState<string>('');
-  const [updateTitle, setUpdateTitle] = useState<string>('');
-  const [updateContent, setUpdateContent] = useState<string>('');
-  console.log('list');
-  const handleDelete = async (id: string) => {
-    try {
-      await onDeleteTodo(id);
-      toast.success('삭제되었습니다.');
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-    }
-  };
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
 
   const handleAddTodo = async () => {
-    if (checkValidation(updateTitle, updateContent)) {
+    if (checkValidation(title, content)) {
       alert('할 일을 입력해주세요!');
       return;
     }
     try {
-      await onAddTodo(updateTitle, updateContent);
-      resetUpdateState();
-      setIsAdding(false);
+      await onAddTodo(title, content);
+      resetAddData();
       toast.success('Todo가 추가되었습니다!');
     } catch (error) {
       console.error('Todo 추가 실패:', error);
@@ -42,36 +29,10 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, 
     }
   };
 
-  const handleEditClick = (todo: Todo) => {
-    setUpdatingId(todo.id);
-    setUpdateTitle(todo.title);
-    setUpdateContent(todo.content);
+  const resetAddData = () => {
+    setTitle('');
+    setContent('');
     setIsAdding(false);
-  };
-
-  const handleUpdateSaveClick = async () => {
-    if (checkValidation(updateTitle, updateContent)) {
-      alert('할 일을 입력해주세요!');
-      return;
-    }
-    try {
-      await onUpdateTodo(updatingId, updateTitle, updateContent);
-      resetUpdateState();
-      toast.success('Todo updated successfully!');
-    } catch (error) {
-      toast.error('Failed to update Todo.');
-      console.error(error);
-    }
-  };
-
-  const handleCancelClick = () => {
-    resetUpdateState();
-  };
-
-  const resetUpdateState = () => {
-    setUpdatingId('');
-    setUpdateTitle('');
-    setUpdateContent('');
   };
 
   return (
@@ -81,16 +42,16 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, 
         <div>
           <input
             type="text"
-            value={updateTitle}
-            onChange={(e) => setUpdateTitle(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <input
             type="content"
-            value={updateContent}
-            onChange={(e) => setUpdateContent(e.target.value)}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
           <button onClick={handleAddTodo}>저장</button>
-          <button onClick={() => setIsAdding(false)}>취소</button>
+          <button onClick={() => resetAddData()}>취소</button>
         </div>
       ) : (
         <button onClick={() => setIsAdding(true)}>추가</button>
@@ -98,32 +59,14 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onDeleteTodo, 
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {updatingId === todo.id ? (
-              <div>
-                <input
-                  type="text"
-                  value={updateTitle}
-                  onChange={(e) => setUpdateTitle(e.target.value)}
-                />
-                <textarea
-                  value={updateContent}
-                  onChange={(e) => setUpdateContent(e.target.value)}
-                />
-                <button onClick={handleUpdateSaveClick}>Save</button>
-                <button onClick={handleCancelClick}>Cancel</button>
-              </div>
-            ) : (
-              <div onClick={() => onSelectTodo(todo)}>
-                <h3>{todo.title}</h3>
-                <p>{todo.content}</p>
-                <button onClick={() => handleEditClick(todo)}>Edit</button>
-                <button onClick={() => handleDelete(todo.id)}>Delete</button>
-              </div>
-            )}
+            <div onClick={() => onSelectTodo(todo)}>
+              <h3>{todo.title}</h3>
+              <p>{todo.content}</p>
+            </div>
           </li>
         ))}
       </ul>
-    </div>
+    </div >
   );
 };
 
