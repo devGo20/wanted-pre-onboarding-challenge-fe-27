@@ -61,16 +61,15 @@ const TodoPage = () => {
   const handleDeleteTodo = async (id: string) => {
     await deleteTodo(id, localStorage.getItem('token') || '');
     setTodos(todos.filter((todo) => todo.id !== id));
+    setSelectedTodo(null);
   };
 
   return (
     <div style={{ display: 'flex' }}>
       <TodoList todos={todos}
         onSelectTodo={handleSelectTodo}
-        onAddTodo={handleAddTodo}
-        onUpdateTodo={handleUpdateTodo}
-        onDeleteTodo={handleDeleteTodo} />
-      {selectedTodo && <TodoDetail selectedTodo={selectedTodo} />}
+        onAddTodo={handleAddTodo} />
+      {selectedTodo && <TodoDetail selectedTodo={selectedTodo} onDeleteTodo={handleDeleteTodo} onUpdateTodo={handleUpdateTodo} />}
     </div>
   );
 };
