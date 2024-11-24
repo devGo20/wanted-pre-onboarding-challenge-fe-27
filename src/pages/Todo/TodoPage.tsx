@@ -1,9 +1,8 @@
 import { useMatch, useNavigate } from 'react-router-dom';
 import TodoList from './TodoList';
 import TodoDetail from './TodoDetail';
-import { useState, useEffect } from 'react';
-import { addTodo, deleteTodo, getTodos, updateTodo } from '../../api/todo';
-import { toast } from 'react-toastify';
+import { useState, useEffect, useMemo } from 'react';
+import { useTodos } from '../../queries/Todo';
 export interface Todo {
   id: string;
   title: string;
@@ -11,67 +10,54 @@ export interface Todo {
   createdAt: string;
   updatedAt: string;
 }
-
 const TodoPage = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { todosQuery, addTodoMutation, updateTodoMutation, deleteTodoMutation } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const match = useMatch('/todos/:id');
   const id = match?.params?.id;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const data = await getTodos(localStorage.getItem('token') || '');
-        setTodos(data);
-      } catch (error) {
-        console.error('Failed to fetch todos:', error);
-        toast.error(error?.response?.data?.message || 'Failed to load todos.');
-        setTodos([]);
-      }
-    };
-
-    fetchTodos();
-  }, []);
+  console.log('?');
+  const todos = useMemo(() => {
+    return todosQuery.data || [];
+  }, [todosQuery.data]);
 
   useEffect(() => {
     if (id) {
-      const todo = todos.find((todo) => todo.id === id);
-      if (todo) {
-        setSelectedTodo(todo);
-      }
-    } else {
-      setSelectedTodo(null);
+      const todo = (todos as Todo[]).find((todo) => todo.id === id);
+      setSelectedTodo(todo || null);
     }
   }, [id, todos]);
 
-  const handleSelectTodo = (todo: Todo) => {
-    setSelectedTodo(todo);
-    navigate(`/todos/${todo.id}`);
+  const handleAddTodo = (title: string, content: string) => {
+    addTodoMutation.mutate({ title, content });
   };
 
-  const handleAddTodo = async (title: string, content: string) => {
-    const newTodo = await addTodo(title, content, localStorage.getItem('token') || '');
-    setTodos([...todos, newTodo]);
+  const handleUpdateTodo = (id: string, title: string, content: string) => {
+    updateTodoMutation.mutate({ id, title, content });
   };
 
-  const handleUpdateTodo = async (id: string, title: string, content: string) => {
-    const updatedTodo = await updateTodo(id, title, content, localStorage.getItem('token') || '');
-    setTodos(todos.map((todo) => (todo.id === id ? updatedTodo : todo)));
-  };
-
-  const handleDeleteTodo = async (id: string) => {
-    await deleteTodo(id, localStorage.getItem('token') || '');
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = (id: string) => {
+    deleteTodoMutation.mutate(id);
     setSelectedTodo(null);
   };
 
   return (
     <div style={{ display: 'flex' }}>
-      <TodoList todos={todos}
-        onSelectTodo={handleSelectTodo}
-        onAddTodo={handleAddTodo} />
-      {selectedTodo && <TodoDetail selectedTodo={selectedTodo} onDeleteTodo={handleDeleteTodo} onUpdateTodo={handleUpdateTodo} />}
+      <TodoList
+        todos={todos}
+        onSelectTodo={(todo) => {
+          setSelectedTodo(todo);
+          navigate(`/todos/${todo.id}`);
+        }}
+        onAddTodo={handleAddTodo}
+      />
+      {selectedTodo && (
+        <TodoDetail
+          selectedTodo={selectedTodo}
+          onUpdateTodo={handleUpdateTodo}
+          onDeleteTodo={handleDeleteTodo}
+        />
+      )}
     </div>
   );
 };
