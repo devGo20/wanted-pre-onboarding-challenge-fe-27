@@ -5,8 +5,8 @@ import { checkValidation } from "../../util/todoHelper";
 
 interface TodoDetailProps {
   selectedTodo: Todo;
-  onDeleteTodo: (id: string) => Promise<void>;
-  onUpdateTodo: (id: string, title: string, content: string) => Promise<void>;
+  onDeleteTodo: (id: string) => void;
+  onUpdateTodo: (id: string, title: string, content: string) => void;
 }
 const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, onDeleteTodo, onUpdateTodo }) => {
   const [isUpdating, setIsUpdating] = useState(false);

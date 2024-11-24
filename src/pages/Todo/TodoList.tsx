@@ -6,7 +6,7 @@ import { checkValidation } from '../../util/todoHelper';
 interface TodoListProps {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
-  onAddTodo: (title: string, content: string) => Promise<void>;
+  onAddTodo: (title: string, content: string) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onAddTodo }) => {
