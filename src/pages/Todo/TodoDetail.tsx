@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Todo } from "./TodoPage";
-import { toast } from "react-toastify";
 import { checkValidation } from "../../util/todoHelper";
 
 interface TodoDetailProps {
@@ -17,14 +16,8 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, onDeleteTodo, onU
       alert('할 일을 입력해주세요!');
       return;
     }
-    try {
-      await onUpdateTodo(selectedTodo.id, updateTitle, updateContent);
-      resetUpdateState();
-      toast.success('Todo updated successfully!');
-    } catch (error) {
-      toast.error('Failed to update Todo.');
-      console.error(error);
-    }
+    onUpdateTodo(selectedTodo.id, updateTitle, updateContent);
+    resetUpdateState();
   };
 
   const handleCancelClick = () => {
@@ -44,13 +37,8 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, onDeleteTodo, onU
     setUpdateContent(selectedTodo.content);
     setIsUpdating(true);
   };
-  const handleDelete = async () => {
-    try {
-      await onDeleteTodo(selectedTodo.id);
-      toast.success('삭제되었습니다.');
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-    }
+  const handleDelete = () => {
+    onDeleteTodo(selectedTodo.id);
   };
 
   return (
