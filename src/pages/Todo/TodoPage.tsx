@@ -36,9 +36,13 @@ const TodoPage = () => {
     updateTodoMutation.mutate({ id, title, content });
   };
 
-  const handleDeleteTodo = (id: string) => {
-    deleteTodoMutation.mutate(id);
-    setSelectedTodo(null);
+  const handleDeleteTodo = async (id: string) => {
+    try {
+      await deleteTodoMutation.mutateAsync(id);
+      setSelectedTodo(null);  // 삭제가 성공한 후에 선택된 todo를 해제
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
   };
 
   return (
