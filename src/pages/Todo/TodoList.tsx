@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { Todo } from './TodoPage';
 import { checkValidation } from '../../util/todoHelper';
 
@@ -14,19 +13,13 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onAddTodo }) =
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  const handleAddTodo = async () => {
+  const handleAddTodo = () => {
     if (checkValidation(title, content)) {
       alert('할 일을 입력해주세요!');
       return;
     }
-    try {
-      await onAddTodo(title, content);
-      resetAddData();
-      toast.success('Todo가 추가되었습니다!');
-    } catch (error) {
-      console.error('Todo 추가 실패:', error);
-      toast.error('Todo를 추가할 수 없습니다.!');
-    }
+    onAddTodo(title, content);
+    resetAddData();
   };
 
   const resetAddData = () => {
