@@ -1,11 +1,10 @@
 import { getTodos, addTodo, updateTodo, deleteTodo } from '../api/todo';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Todo } from '../pages/Todo/TodoPage';
+import { queryClient } from '../App';
 
 export const useTodos = () => {
-  const queryClient = useQueryClient();
-
   const todosQuery = useQuery<Todo[], Error>({
     queryKey: ['todos'],
     queryFn: async () => {
