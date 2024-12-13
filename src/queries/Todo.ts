@@ -3,7 +3,13 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Todo } from '../pages/Todo/TodoPage';
 import { queryClient } from '../App';
-
+interface ApiError {
+  response?: {
+    data?: {
+      details?: string;
+    };
+  };
+}
 export const useTodos = () => {
   const todosQuery = useQuery<Todo[]>({
     queryKey: ['todos'],
@@ -11,9 +17,14 @@ export const useTodos = () => {
       try {
         const token = localStorage.getItem('token') || '';
         return await getTodos(token);
-      } catch (error) {
-        console.error('Error fetching todos:', error);
-        toast.error(error.response.data.details);
+      } catch (error: unknown) {
+        const apiError = error as ApiError;
+        if (apiError.response?.data?.details) {
+          toast.error(apiError.response.data.details);
+        } else {
+          toast.error('오류가 발생했습니다. 다시 시도하세요.');
+        }
+        throw error;
       }
     },
   });
@@ -23,9 +34,13 @@ export const useTodos = () => {
       try {
         const token = localStorage.getItem('token') || '';
         return await addTodo(title, content, token);
-      } catch (error) {
-        console.error('Error add todos:', error);
-        toast.error(error.response.data.details);
+      } catch (error: unknown) {
+        const apiError = error as ApiError;
+        if (apiError.response?.data?.details) {
+          toast.error(apiError.response.data.details);
+        } else {
+          toast.error('오류가 발생했습니다. 다시 시도하세요.');
+        }
         throw error;
       }
     },
@@ -40,9 +55,13 @@ export const useTodos = () => {
       try {
         const token = localStorage.getItem('token') || '';
         return await updateTodo(id, title, content, token);
-      } catch (error) {
-        console.error('Error add todos:', error);
-        toast.error(error?.response?.data?.details || 'Failed to update todo.');
+      } catch (error: unknown) {
+        const apiError = error as ApiError;
+        if (apiError.response?.data?.details) {
+          toast.error(apiError.response.data.details);
+        } else {
+          toast.error('오류가 발생했습니다. 다시 시도하세요.');
+        }
         throw error;
       }
     },
@@ -59,9 +78,13 @@ export const useTodos = () => {
       try {
         const token = localStorage.getItem('token') || '';
         return await deleteTodo(id, token);
-      } catch (error) {
-        console.error('Error add todos:', error);
-        toast.error(error?.response?.data?.details || 'Failed to update todo.');
+      } catch (error: unknown) {
+        const apiError = error as ApiError;
+        if (apiError.response?.data?.details) {
+          toast.error(apiError.response.data.details);
+        } else {
+          toast.error('오류가 발생했습니다. 다시 시도하세요.');
+        }
         throw error;
       }
     },
