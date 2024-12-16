@@ -3,13 +3,9 @@ import TodoList from './TodoList';
 import TodoDetail from './TodoDetail';
 import { useState, useEffect, useMemo } from 'react';
 import { useTodos } from '../../queries/Todo';
-export interface Todo {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import useQueryStrings from '../../util/useQueryString';
+import { Priority, Todo } from '../../model/todo';
+
 const TodoPage = () => {
   const { todosQuery, addTodoMutation, updateTodoMutation, deleteTodoMutation } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
@@ -20,6 +16,11 @@ const TodoPage = () => {
     return todosQuery.data || [];
   }, [todosQuery.data]);
 
+  const { getParams, setParams } = useQueryStrings();
+  const { priority } = getParams();
+  const handlePriorityChange = (newPriority: string) => {
+    setParams({ priority: newPriority });
+  };
   useEffect(() => {
     if (id) {
       const todo = (todos as Todo[]).find((todo) => todo.id === id);
@@ -46,6 +47,20 @@ const TodoPage = () => {
 
   return (
     <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', gap: '20px' }}>
+        {Object.values(Priority).map((item) => (
+          <button
+            key={item}
+            onClick={() => handlePriorityChange(item)}
+            style={{
+              border: 'none',
+              borderBottom: priority === item ? '2px solid black' : '2px solid transparent',
+            }}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
       <TodoList
         todos={todos}
         onSelectTodo={(todo) => {
