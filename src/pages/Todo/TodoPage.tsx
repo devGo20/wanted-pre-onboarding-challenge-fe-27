@@ -16,7 +16,6 @@ const TodoPage = () => {
   const match = useMatch('/todos/:id');
   const id = match?.params?.id;
   const navigate = useNavigate();
-  console.log('?');
   const todos = useMemo(() => {
     return todosQuery.data || [];
   }, [todosQuery.data]);
