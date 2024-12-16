@@ -1,11 +1,12 @@
 import axios from "axios";
 import { API_ROUTES } from "../config/apiConfig";
 
-export const getTodos = async (token: string) => {
+export const getTodos = async (token: string, params: any) => {
 	const response = await axios.get(API_ROUTES.TODO, {
 		headers: {
 			Authorization: token,
 		},
+		params
 	});
 
 	return response.data.data;
