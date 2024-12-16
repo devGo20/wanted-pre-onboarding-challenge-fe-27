@@ -27,8 +27,8 @@ const TodoPage = () => {
     }
   }, [id, todos]);
 
-  const handleAddTodo = (title: string, content: string) => {
-    addTodoMutation.mutate({ title, content });
+  const handleAddTodo = (title: string, content: string, priority: string) => {
+    addTodoMutation.mutate({ title, content, priority });
   };
 
   const handleUpdateTodo = (id: string, title: string, content: string) => {

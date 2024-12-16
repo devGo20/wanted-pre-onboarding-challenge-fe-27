@@ -12,12 +12,13 @@ export const getTodos = async (token: string) => {
 };
 
 
-export const addTodo = async (title: string, content: string, token: string,) => {
+export const addTodo = async (title: string, content: string, priority: string, token: string,) => {
 	const response = await axios.post(
 		API_ROUTES.TODO,
 		{
 			title,
 			content,
+			priority
 		},
 		{
 			headers: {
