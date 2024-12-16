@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Todo } from "./TodoPage";
 import { checkValidation } from "../../util/todoHelper";
+import { Todo } from "../../model/todo";
 
 interface TodoDetailProps {
   selectedTodo: Todo;
@@ -31,7 +31,6 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, onDeleteTodo, onU
   };
 
   if (!selectedTodo) return <p>Loading...</p>;
-  console.log('detail');
   const handleEditClick = () => {
     setUpdateTitle(selectedTodo.title);
     setUpdateContent(selectedTodo.content);

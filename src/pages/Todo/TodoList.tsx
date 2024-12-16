@@ -1,19 +1,13 @@
 import { useState } from 'react';
-import { Todo } from './TodoPage';
 import { checkValidation } from '../../util/todoHelper';
+import { Priority, Todo } from '../../model/todo';
 
 interface TodoListProps {
   todos: Todo[];
   onSelectTodo: (todo: Todo) => void;
   onAddTodo: (title: string, content: string, priority: string) => void;
 }
-export const Priority = {
-  Urgent: 'urgent',
-  Normal: 'normal',
-  Low: 'low',
-} as const;
 
-export type Priority = typeof Priority[keyof typeof Priority];
 const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo, onAddTodo }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [priority, setPriority] = useState<Priority>('normal');
