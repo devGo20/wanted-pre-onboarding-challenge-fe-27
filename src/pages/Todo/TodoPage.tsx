@@ -3,8 +3,8 @@ import TodoList from './TodoList';
 import TodoDetail from './TodoDetail';
 import { useState, useEffect, useMemo } from 'react';
 import { useTodos } from '../../queries/Todo';
-import useQueryStrings from '../../util/useQueryString';
 import { Priority, Todo } from '../../model/todo';
+import { useQueryStrings } from '../../util/queryStringUtils';
 
 const TodoPage = () => {
   const { todosQuery, addTodoMutation, updateTodoMutation, deleteTodoMutation } = useTodos();
