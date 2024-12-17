@@ -7,7 +7,7 @@ import { Priority, Todo } from '../../model/todo';
 import { useQueryStrings } from '../../util/queryStringUtils';
 
 const TodoPage = () => {
-  const { todosQuery, addTodoMutation, updateTodoMutation, deleteTodoMutation } = useTodos();
+  const { todosQuery, addTodoMutation } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const match = useMatch('/todos/:id');
   const id = match?.params?.id;
@@ -30,19 +30,6 @@ const TodoPage = () => {
 
   const handleAddTodo = (title: string, content: string, priority: string) => {
     addTodoMutation.mutate({ title, content, priority });
-  };
-
-  const handleUpdateTodo = (id: string, title: string, content: string) => {
-    updateTodoMutation.mutate({ id, title, content });
-  };
-
-  const handleDeleteTodo = async (id: string) => {
-    try {
-      await deleteTodoMutation.mutateAsync(id);
-      setSelectedTodo(null);  // 삭제가 성공한 후에 선택된 todo를 해제
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-    }
   };
 
   return (
@@ -72,8 +59,7 @@ const TodoPage = () => {
       {selectedTodo && (
         <TodoDetail
           selectedTodo={selectedTodo}
-          onUpdateTodo={handleUpdateTodo}
-          onDeleteTodo={handleDeleteTodo}
+          setSelectedTodo={setSelectedTodo}
         />
       )}
     </div>
