@@ -65,7 +65,7 @@ export const useTodos = () => {
       }
     },
     onSuccess: (updatedTodo: Todo) => {
-      queryClient.setQueryData(['todos'], (oldTodos: Todo[] | undefined) =>
+      queryClient.setQueryData(['todos', params], (oldTodos: Todo[] | undefined) =>
         oldTodos?.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)) || [],
       );
       toast.success('Todo updated successfully!');
@@ -88,7 +88,7 @@ export const useTodos = () => {
       }
     },
     onSuccess: (_, id) => {
-      queryClient.setQueryData(['todos'], (oldTodos: Todo[] | undefined) =>
+      queryClient.setQueryData(['todos', params], (oldTodos: Todo[] | undefined) =>
         oldTodos?.filter((todo) => todo.id !== id) || [],
       );
       toast.success('Todo deleted successfully!');
