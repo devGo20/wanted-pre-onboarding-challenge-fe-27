@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { checkValidation } from "../../util/todoHelper";
 import { Todo } from "../../model/todo";
 import { useTodos } from "../../queries/Todo";
+import { useNavigate } from "react-router-dom";
 
 interface TodoDetailProps {
   selectedTodo: Todo;
@@ -11,6 +12,7 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, setSelectedTodo }
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateTitle, setUpdateTitle] = useState<string>('');
   const [updateContent, setUpdateContent] = useState<string>('');
+  const navigate = useNavigate();
   const { updateTodoMutation, deleteTodoMutation } = useTodos();
 
   const onUpdateTodo = (id: string, title: string, content: string) => {
@@ -20,6 +22,7 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, setSelectedTodo }
   const onDeleteTodo = async (id: string) => {
     await deleteTodoMutation.mutateAsync(id);
     setSelectedTodo(null);
+    navigate('/');
   };
 
   const handleCancelClick = () => {
