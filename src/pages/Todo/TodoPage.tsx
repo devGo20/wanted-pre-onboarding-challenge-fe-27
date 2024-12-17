@@ -5,9 +5,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTodos } from '../../queries/Todo';
 import { Priority, Todo } from '../../model/todo';
 import { useQueryStrings } from '../../util/queryStringUtils';
+import TodoForm from './TodoForm';
 
 const TodoPage = () => {
-  const { todosQuery, addTodoMutation } = useTodos();
+  const { todosQuery } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const match = useMatch('/todos/:id');
   const id = match?.params?.id;
@@ -28,11 +29,6 @@ const TodoPage = () => {
     }
   }, [id, todos]);
 
-  const handleAddTodo = (title: string, content: string, priority: string) => {
-    addTodoMutation.mutate({ title, content, priority });
-    navigate('/');
-  };
-
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ display: 'flex', gap: '20px' }}>
@@ -49,13 +45,13 @@ const TodoPage = () => {
           </button>
         ))}
       </div>
+      <TodoForm />
       <TodoList
         todos={todos}
         onSelectTodo={(todo) => {
           setSelectedTodo(todo);
           navigate(`/todos/${todo.id}?${new URLSearchParams(getParams()).toString()}`);;
         }}
-        onAddTodo={handleAddTodo}
       />
       {selectedTodo && (
         <TodoDetail
