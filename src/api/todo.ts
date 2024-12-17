@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_ROUTES } from "../config/apiConfig";
+import { QueryParams } from "../model/api";
 
-export const getTodos = async (token: string, params: any) => {
+export const getTodos = async (token: string, params: QueryParams) => {
 	const response = await axios.get(API_ROUTES.TODO, {
 		headers: {
 			Authorization: token,
