@@ -30,6 +30,7 @@ const TodoPage = () => {
 
   const handleAddTodo = (title: string, content: string, priority: string) => {
     addTodoMutation.mutate({ title, content, priority });
+    navigate('/');
   };
 
   return (
@@ -52,7 +53,7 @@ const TodoPage = () => {
         todos={todos}
         onSelectTodo={(todo) => {
           setSelectedTodo(todo);
-          navigate(`/todos/${todo.id}`);
+          navigate(`/todos/${todo.id}?${new URLSearchParams(getParams()).toString()}`);;
         }}
         onAddTodo={handleAddTodo}
       />
