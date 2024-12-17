@@ -17,9 +17,9 @@ const TodoPage = () => {
   }, [todosQuery.data]);
 
   const { getParams, setParams } = useQueryStrings();
-  const { priority } = getParams();
+  const { priorityFilter } = getParams();
   const handlePriorityChange = (newPriority: string) => {
-    setParams({ priority: newPriority });
+    setParams({ priorityFilter: newPriority });
   };
   useEffect(() => {
     if (id) {
@@ -41,7 +41,7 @@ const TodoPage = () => {
             onClick={() => handlePriorityChange(item)}
             style={{
               border: 'none',
-              borderBottom: priority === item ? '2px solid black' : '2px solid transparent',
+              borderBottom: priorityFilter === item ? '2px solid black' : '2px solid transparent',
             }}
           >
             {item}

@@ -2,7 +2,7 @@ export type QueryParams = {
   countOnly: string;
   keyword: string;
   order: string;
-  priority: string;
+  priorityFilter: string;
   sort: string;
 };
 

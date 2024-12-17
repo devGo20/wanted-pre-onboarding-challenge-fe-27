@@ -6,7 +6,7 @@ export function getQueryStringValues(queryString: string) {
   return {
     sort: searchParams.get('sort') || 'createdAt',
     order: searchParams.get('order') || 'desc',
-    priority: searchParams.get('priority') || '',
+    priorityFilter: searchParams.get('priorityFilter') || '',
     keyword: searchParams.get('keyword') || '',
     countOnly: searchParams.get('countOnly') || "false"
   };
