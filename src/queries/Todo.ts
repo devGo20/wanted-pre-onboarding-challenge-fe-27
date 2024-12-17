@@ -1,22 +1,21 @@
 import { getTodos, addTodo, updateTodo, deleteTodo } from '../api/todo';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Todo } from '../pages/Todo/TodoPage';
 import { queryClient } from '../App';
-interface ApiError {
-  response?: {
-    data?: {
-      details?: string;
-    };
-  };
-}
+import { Todo } from '../model/todo';
+import { ApiError } from '../model/api';
+import { useQueryStrings } from '../util/queryStringUtils';
+
 export const useTodos = () => {
+  const { getParams } = useQueryStrings();
+  const params = getParams();
+
   const todosQuery = useQuery<Todo[]>({
-    queryKey: ['todos'],
+    queryKey: ['todos', params],
     queryFn: async () => {
       try {
         const token = localStorage.getItem('token') || '';
-        return await getTodos(token);
+        return await getTodos(token, params);
       } catch (error: unknown) {
         const apiError = error as ApiError;
         if (apiError.response?.data?.details) {
