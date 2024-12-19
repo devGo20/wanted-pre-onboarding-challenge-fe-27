@@ -3,10 +3,11 @@ import TodoList from './TodoList';
 import TodoDetail from './TodoDetail';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTodos } from '../../queries/Todo';
-import { Priority, Todo } from '../../model/todo';
+import { Todo } from '../../model/todo';
 import { useQueryStrings } from '../../util/queryStringUtils';
 import TodoForm from '../../compontent/TodoForm';
 import SearchForm from '../../compontent/SearchForm';
+import { PriorityButtons } from '../../compontent/PriorityButtons';
 
 const TodoPage = () => {
   const { todosQuery } = useTodos();
@@ -39,20 +40,7 @@ const TodoPage = () => {
   return (
     <div>
       <SearchForm onSubmit={handleSearch} ref={inputRef} />
-      <div style={{ display: 'flex', gap: '20px' }}>
-        {Object.values(Priority).map((item) => (
-          <button
-            key={item}
-            onClick={() => handlePriorityChange(item)}
-            style={{
-              border: 'none',
-              borderBottom: priorityFilter === item ? '2px solid black' : '2px solid transparent',
-            }}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
       <TodoForm />
       <TodoList
         todos={todos}

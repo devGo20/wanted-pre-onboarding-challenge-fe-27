@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { Priority } from "../model/todo";
 import { checkValidation } from "../util/todoHelper";
 import { useTodos } from "../queries/Todo";
 import { useNavigate } from "react-router-dom";
+import { PriorityButtons } from "./PriorityButtons";
 
 const TodoForm: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
-  const [priority, setPriority] = useState<Priority>('normal');
+  const [priority, setPriority] = useState<string>('normal');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const { addTodoMutation } = useTodos();
   const navigate = useNavigate();
 
-  const handleSelectPriority = (selectedPriority: Priority) => {
+  const handleSelectPriority = (selectedPriority: string) => {
     setPriority(selectedPriority);
   };
 
@@ -36,20 +36,7 @@ const TodoForm: React.FC = () => {
 
   return isAdding ? (
     <div>
-      <div style={{ display: 'flex', gap: '20px' }}>
-        {Object.values(Priority).map((item) => (
-          <button
-            key={item}
-            onClick={() => handleSelectPriority(item)}
-            style={{
-              border: 'none',
-              borderBottom: priority === item ? '2px solid black' : '2px solid transparent',
-            }}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <PriorityButtons onSelect={handleSelectPriority} selectedPriority={priority} />
       <input
         type="text"
         value={title}
