@@ -8,6 +8,8 @@ import { useQueryStrings } from '../../util/queryStringUtils';
 import TodoForm from '../../compontent/TodoForm';
 import SearchForm from '../../compontent/SearchForm';
 import { PriorityButtons } from '../../compontent/PriorityButtons';
+import { DropDown } from '../../compontent/DropDown';
+import { SortOptions } from '../../model/option';
 
 const TodoPage = () => {
   const { todosQuery } = useTodos();
@@ -30,6 +32,11 @@ const TodoPage = () => {
     const searchKeyword = inputRef.current?.value;
     setParams({ keyword: searchKeyword });
   };
+
+  const handleSortChange = (value: { sort: string; order: string; }) => {
+    setParams({ sort: value.sort, order: value.order });
+  };
+
   useEffect(() => {
     if (id) {
       const todo = (todos as Todo[]).find((todo) => todo.id === id);
@@ -40,7 +47,10 @@ const TodoPage = () => {
   return (
     <div>
       <SearchForm onSubmit={handleSearch} ref={inputRef} />
-      <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
+      <div className='flex'>
+        <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
+        <DropDown onSelect={handleSortChange} options={SortOptions} />
+      </div>
       <TodoForm />
       <TodoList
         todos={todos}
