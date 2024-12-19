@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTodos } from '../../queries/Todo';
 import { Priority, Todo } from '../../model/todo';
 import { useQueryStrings } from '../../util/queryStringUtils';
-import TodoForm from './TodoForm';
+import TodoForm from '../../compontent/TodoForm';
 import SearchForm from '../../compontent/SearchForm';
 
 const TodoPage = () => {

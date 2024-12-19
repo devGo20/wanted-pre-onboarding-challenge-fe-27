@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Priority } from "../../model/todo";
-import { checkValidation } from "../../util/todoHelper";
-import { useTodos } from "../../queries/Todo";
+import { Priority } from "../model/todo";
+import { checkValidation } from "../util/todoHelper";
+import { useTodos } from "../queries/Todo";
 import { useNavigate } from "react-router-dom";
 
 const TodoForm: React.FC = () => {
