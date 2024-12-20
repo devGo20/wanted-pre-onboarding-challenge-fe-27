@@ -10,6 +10,7 @@ import SearchForm from '../../compontent/SearchForm';
 import { PriorityButtons } from '../../compontent/PriorityButtons';
 import { DropDown } from '../../compontent/DropDown';
 import { SortOptions } from '../../model/option';
+import FilterChips from '../../compontent/FilterChips';
 
 const TodoPage = () => {
   const { todosQuery } = useTodos();
@@ -23,7 +24,8 @@ const TodoPage = () => {
   }, [todosQuery.data]);
 
   const { getParams, setParams } = useQueryStrings();
-  const { priorityFilter } = getParams();
+  const { priorityFilter, keyword } = getParams();
+  const applyedFilters = { keyword, priorityFilter };
   const handlePriorityChange = (newPriority: string) => {
     setParams({ priorityFilter: newPriority });
   };
@@ -43,7 +45,9 @@ const TodoPage = () => {
       setSelectedTodo(todo || null);
     }
   }, [id, todos]);
-
+  const handleRemoveFilter = (key: string) => {
+    setParams({ [key]: '' });
+  };
   return (
     <div>
       <SearchForm onSubmit={handleSearch} ref={inputRef} />
@@ -51,6 +55,7 @@ const TodoPage = () => {
         <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
         <DropDown onSelect={handleSortChange} options={SortOptions} />
       </div>
+      <FilterChips filters={applyedFilters} onRemove={handleRemoveFilter} />
       <TodoForm />
       <TodoList
         todos={todos}
