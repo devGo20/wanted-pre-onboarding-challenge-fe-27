@@ -50,10 +50,10 @@ export const useTodos = () => {
   });
 
   const updateTodoMutation = useMutation({
-    mutationFn: async ({ id, title, content }: { id: string; title: string; content: string; }) => {
+    mutationFn: async ({ id, title, content, priority }: { id: string; title: string; content: string; priority: string; }) => {
       try {
         const token = localStorage.getItem('token') || '';
-        return await updateTodo(id, title, content, token);
+        return await updateTodo(id, title, content, priority, token);
       } catch (error: unknown) {
         const apiError = error as ApiError;
         if (apiError.response?.data?.details) {
