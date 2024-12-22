@@ -13,8 +13,9 @@ import { SortOptions } from '../../model/option';
 import FilterChips from '../../compontent/FilterChips';
 
 const TodoPage = () => {
-  const { todosQuery } = useTodos();
+  const { todosQuery, addTodoMutation } = useTodos();
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const match = useMatch('/todos/:id');
   const id = match?.params?.id;
@@ -34,7 +35,11 @@ const TodoPage = () => {
     const searchKeyword = inputRef.current?.value;
     setParams({ keyword: searchKeyword });
   };
-
+  const handleAddTodo = (data: { title: string; content: string; priority: string; }) => {
+    addTodoMutation.mutate(data);
+    setIsAdding(false);
+    navigate('/');
+  };
   const handleSortChange = (value: { sort: string; order: string; }) => {
     setParams({ sort: value.sort, order: value.order });
   };
@@ -56,7 +61,16 @@ const TodoPage = () => {
         <DropDown onSelect={handleSortChange} options={SortOptions} />
       </div>
       <FilterChips filters={applyedFilters} onRemove={handleRemoveFilter} />
-      <TodoForm />
+      <div>
+        {isAdding ? (
+          <TodoForm
+            onSubmit={handleAddTodo}
+            onCancel={() => setIsAdding(false)}
+          />
+        ) : (
+          <button onClick={() => setIsAdding(true)}>추가</button>
+        )}
+      </div>
       <TodoList
         todos={todos}
         onSelectTodo={(todo) => {
