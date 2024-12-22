@@ -33,10 +33,11 @@ export const addTodo = async (title: string, content: string, priority: string, 
 };
 
 
-export const updateTodo = async (id: string, title: string, content: string, token: string,) => {
+export const updateTodo = async (id: string, title: string, content: string, priority: string, token: string,) => {
 	const response = await axios.put(`${API_ROUTES.TODO}/${id}`, {
 		title: title,
 		content: content,
+		priority: priority,
 	}, {
 		headers: {
 			Authorization: token,
