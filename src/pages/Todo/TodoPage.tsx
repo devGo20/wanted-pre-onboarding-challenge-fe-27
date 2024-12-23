@@ -54,35 +54,48 @@ const TodoPage = () => {
     setParams({ [key]: '' });
   };
   return (
-    <div>
-      <SearchForm onSubmit={handleSearch} ref={inputRef} />
-      <div className='flex'>
-        <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
-        <DropDown onSelect={handleSortChange} options={SortOptions} />
-      </div>
-      <FilterChips filters={applyedFilters} onRemove={handleRemoveFilter} />
-      <div>
-        {isAdding ? (
-          <TodoForm
-            onSubmit={handleAddTodo}
-            onCancel={() => setIsAdding(false)}
+    <div className="flex h-screen">
+      {/* Todo List Section */}
+      <div className="flex flex-col">
+        {/* Search Form */}
+        <SearchForm onSubmit={handleSearch} ref={inputRef} />
+        {/* Filters */}
+        <div className="flex justify-between items-center px-4 py-2 border-b">
+          {/* Priority Buttons */}
+          <PriorityButtons onSelect={handlePriorityChange} selectedPriority={priorityFilter} />
+          {/* Sort Dropdown */}
+          <DropDown onSelect={handleSortChange} options={SortOptions} />
+        </div>
+        <FilterChips filters={applyedFilters} onRemove={handleRemoveFilter} />
+        {/* Add Todo */}
+        <div className="p-4">
+          {isAdding ? (
+            <TodoForm onSubmit={handleAddTodo} onCancel={() => setIsAdding(false)} />
+          ) : (
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-md" onClick={() => setIsAdding(true)}>
+              추가
+            </button>
+          )}
+        </div>
+        {/* Todo List */}
+        <div className="flex-1 overflow-y-auto">
+          <TodoList
+            todos={todos}
+            onSelectTodo={(todo) => {
+              setSelectedTodo(todo);
+              navigate(`/todos/${todo.id}?${new URLSearchParams(getParams()).toString()}`);
+            }}
           />
-        ) : (
-          <button onClick={() => setIsAdding(true)}>추가</button>
-        )}
+        </div>
+
+
       </div>
-      <TodoList
-        todos={todos}
-        onSelectTodo={(todo) => {
-          setSelectedTodo(todo);
-          navigate(`/todos/${todo.id}?${new URLSearchParams(getParams()).toString()}`);;
-        }}
-      />
+
+      {/* Todo Detail Section */}
       {selectedTodo && (
-        <TodoDetail
-          selectedTodo={selectedTodo}
-          setSelectedTodo={setSelectedTodo}
-        />
+        <div className="flex-1 p-4">
+          <TodoDetail selectedTodo={selectedTodo} setSelectedTodo={setSelectedTodo} />
+        </div>
       )}
     </div>
   );
