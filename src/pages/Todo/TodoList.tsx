@@ -9,13 +9,15 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onSelectTodo }) => {
   return (
     <div>
       <h2>Todo List</h2>
-      <ul>
+      <ul className="flex flex-col gap-4">
         {todos.map((todo) => (
-          <li key={todo.id}>
-            <div onClick={() => onSelectTodo(todo)}>
-              <h3>{todo.title}</h3>
-              <p>{todo.content}</p>
-            </div>
+          <li
+            key={todo.id}
+            onClick={() => onSelectTodo(todo)}
+            className="flex items-center h-12 px-8 border border-gray rounded-lg cursor-pointer"
+          >
+            <h3>{todo.title}</h3>
+            {/* <p>{todo.content}</p> */}
           </li>
         ))}
       </ul>
