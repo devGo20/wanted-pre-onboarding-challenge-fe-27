@@ -64,10 +64,8 @@ export const useTodos = () => {
         throw error;
       }
     },
-    onSuccess: (updatedTodo: Todo) => {
-      queryClient.setQueryData(['todos', params], (oldTodos: Todo[] | undefined) =>
-        oldTodos?.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo)) || [],
-      );
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos', params]);
       toast.success('Todo updated successfully!');
     },
   });
