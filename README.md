@@ -17,4 +17,5 @@
 ## 기술 스택
 - **React**: UI 구성 및 상태 관리
 - **TypeScript**: 정적 타입 검사 및 코드 품질 향상
-- **Tailwind CSS**: 유틸리티 기반 CSS 프레임워크로 빠른 스타
+- **Tailwind CSS**: 유틸리티 기반 CSS 프레임워크로 빠른 스타일링
+- **TanStack Query**: 서버 상태 관리 및 데이터 페칭을 위한 라이브러리
