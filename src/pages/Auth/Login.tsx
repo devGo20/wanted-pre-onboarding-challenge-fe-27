@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import AuthForm from './AuthForm';
-import { API_ROUTES } from '../../config/apiConfig';
-import { toast } from 'react-toastify';
-import { ApiError } from '../../model/api';
+import { login } from '../../api/auth';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -13,19 +10,11 @@ const Login: React.FC = () => {
       navigate('/');
     }
   }, [navigate]);
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(API_ROUTES.USER_LOGIN, { email, password });
-      localStorage.setItem('token', response.data.token);
-      navigate('/');
-    } catch (error: unknown) {
-      const apiError = error as ApiError;
-      toast.error(apiError.response?.data?.details || 'Login failed');
-      console.error('Login failed:', error);
-    }
+  const handleLoginSubmit = (email: string, password: string) => {
+    login(email, password);
   };
 
-  return <AuthForm onSubmit={handleLogin} title="Login" buttonText="Login" />;
+  return <AuthForm onSubmit={handleLoginSubmit} title="Login" buttonText="Login" />;
 };
 
 export default Login;
