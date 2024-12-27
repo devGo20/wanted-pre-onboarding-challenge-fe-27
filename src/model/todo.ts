@@ -2,6 +2,7 @@ export interface Todo {
   id: string;
   title: string;
   content: string;
+  complete?: boolean;
   priority: string;
   createdAt: string;
   updatedAt: string;
