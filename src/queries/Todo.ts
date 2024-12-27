@@ -1,4 +1,4 @@
-import { getTodos, addTodo, updateTodo, deleteTodo } from '../api/todo';
+import { getTodos, addTodo, updateTodo, deleteTodo, updateTodoComplete } from '../api/todo';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../App';
@@ -93,10 +93,32 @@ export const useTodos = () => {
     },
   });
 
+  const updateCompleteTodoMutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const token = localStorage.getItem('token') || '';
+        return await updateTodoComplete(id, token);
+      } catch (error: unknown) {
+        const apiError = error as ApiError;
+        if (apiError.response?.data?.details) {
+          toast.error(apiError.response.data.details);
+        } else {
+          toast.error('오류가 발생했습니다. 다시 시도하세요.');
+        }
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos', params]);
+      toast.success('Todo updated successfully!');
+    },
+  });
+
   return {
     todosQuery,
     addTodoMutation,
     updateTodoMutation,
     deleteTodoMutation,
+    updateCompleteTodoMutation
   };
 };

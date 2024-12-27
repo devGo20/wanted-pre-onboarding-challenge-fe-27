@@ -54,3 +54,12 @@ export const deleteTodo = async (id: string, token: string) => {
 		}
 	});
 };
+
+export const updateTodoComplete = async (id: string, token: string) => {
+	await axios.put(`${API_ROUTES.TODO}/${id}/complete`, {}, {
+		headers: {
+			Authorization: token,
+		}
+	});
+};
+
