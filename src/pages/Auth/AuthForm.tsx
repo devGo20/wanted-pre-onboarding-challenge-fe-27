@@ -22,7 +22,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit, title, buttonText }) => {
       <h2>{title}</h2>
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-      <button type="submit" disabled={!isButtonEnabled}>{buttonText}</button>
+      <button type="submit" className={`${!isButtonEnabled ? 'text-gray-400 cursor-not-allowed' : ''}`}
+        disabled={!isButtonEnabled}>{buttonText}</button>
     </form>
   );
 };
