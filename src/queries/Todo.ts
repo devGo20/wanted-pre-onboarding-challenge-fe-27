@@ -65,7 +65,7 @@ export const useTodos = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['todos', params]);
+      queryClient.invalidateQueries({ queryKey: ['todos', params] });
       toast.success('Todo updated successfully!');
     },
   });
