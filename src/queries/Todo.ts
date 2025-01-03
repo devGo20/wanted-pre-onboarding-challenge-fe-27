@@ -1,6 +1,6 @@
 import { getTodos, addTodo, updateTodo, deleteTodo, updateTodoComplete } from '../api/todo';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { InvalidateQueryFilters, useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '../App';
 import { Todo } from '../model/todo';
 import { ApiError } from '../model/api';
@@ -65,7 +65,9 @@ export const useTodos = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos', params] });
+      queryClient.invalidateQueries({
+        queryKey: ['todos', params]
+      } as InvalidateQueryFilters);
       toast.success('Todo updated successfully!');
     },
   });
