@@ -18,12 +18,37 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit, title, buttonText }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{title}</h2>
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-      <button type="submit" className={`${!isButtonEnabled ? 'text-gray-400 cursor-not-allowed' : ''}`}
-        disabled={!isButtonEnabled}>{buttonText}</button>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6"
+    >
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{title}</h2>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        required
+        className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        required
+        className="w-full p-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      />
+      <button
+        type="submit"
+        disabled={!isButtonEnabled}
+        className={`w-full py-3 text-white font-semibold rounded-lg transition-colors ${isButtonEnabled
+          ? 'bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900'
+          : 'bg-gray-300 cursor-not-allowed dark:bg-gray-600'
+          }`}
+      >
+        {buttonText}
+      </button>
     </form>
   );
 };
