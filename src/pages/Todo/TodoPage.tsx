@@ -4,7 +4,7 @@ import TodoDetail from './TodoDetail';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTodos } from '../../queries/Todo';
 import { Todo } from '../../model/todo';
-import { useQueryStrings } from '../../util/queryStringUtils';
+import { createQueryString, useQueryStrings } from '../../util/queryStringUtils';
 import TodoForm from '../../compontent/TodoForm';
 import SearchForm from '../../compontent/SearchForm';
 import { PriorityButtons } from '../../compontent/PriorityButtons';
@@ -48,9 +48,14 @@ const TodoPage = () => {
   useEffect(() => {
     if (id) {
       const todo = (todos as Todo[]).find((todo) => todo.id === id);
+      if (!todo) {
+        const params = getParams();
+        const queryString = createQueryString(params);
+        navigate(`/todos?${queryString}`);
+      }
       setSelectedTodo(todo || null);
     }
-  }, [id, todos]);
+  }, [getParams, id, navigate, todos]);
   const handleRemoveFilter = (key: string) => {
     setParams({ [key]: '' });
   };
