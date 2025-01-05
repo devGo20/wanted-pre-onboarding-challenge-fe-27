@@ -1,0 +1,11 @@
+name: Ping Server
+on:
+  schedule:
+    - cron: '*/14 * * * *'
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping
+        run: curl https://todo-application-yh3t.onrender.com
+
