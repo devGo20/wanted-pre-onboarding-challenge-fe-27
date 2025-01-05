@@ -3,6 +3,7 @@ import { Todo } from "../../model/todo";
 import { useTodos } from "../../queries/Todo";
 import { useNavigate } from "react-router-dom";
 import TodoForm from "../../compontent/TodoForm";
+import { formatDateTime } from "../../util/todoHelper";
 
 interface TodoDetailProps {
   selectedTodo: Todo;
@@ -49,8 +50,10 @@ const TodoDetail: React.FC<TodoDetailProps> = ({ selectedTodo, setSelectedTodo }
         />
       ) : (
         <div>
+          <p>{selectedTodo.priority}</p>
           <h3>{selectedTodo.title}</h3>
           <p>{selectedTodo.content}</p>
+          <p>{formatDateTime(selectedTodo.createdAt)}</p>
           <button onClick={() => handleEditClick()}>Edit</button>
           <button onClick={() => handleDelete()}>Delete</button>
         </div>
