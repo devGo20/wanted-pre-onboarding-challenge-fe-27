@@ -5,8 +5,8 @@
 이 프로젝트는 **원티드 프리온보딩** 과정 중 개발한 **Todo 애플리케이션**입니다. 사용자는 다양한 작업들을 관리할 수 있으며, 우선순위 설정, 정렬, 필터링, 검색 등의 기능을 통해 효율적으로 Todo를 확인할 수 있습니다. 이 애플리케이션은 **React**, **TypeScript**, **Tailwind CSS**, **TanStack Query** 등의 최신 기술 스택을 사용하여 개발되었습니다.
 
 ## 프로젝트 url
-[todo 둘러보기](https://wanted-pre-onboarding-challenge-fe-27-eight.vercel.app/todos)
-
+[todo 둘러보기](https://wanted-pre-onboarding-challenge-fe-27-eight.vercel.app/todos/signup)
+회원가입 혹은 로그인 후 Todo페이지 접근 가능
 ## 기능
 
 ### 주요 기능
