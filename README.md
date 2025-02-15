@@ -5,8 +5,8 @@
 이 프로젝트는 **원티드 프리온보딩** 과정 중 개발한 **Todo 애플리케이션**입니다. 사용자는 다양한 작업들을 관리할 수 있으며, 우선순위 설정, 정렬, 필터링, 검색 등의 기능을 통해 효율적으로 Todo를 확인할 수 있습니다. 이 애플리케이션은 **React**, **TypeScript**, **Tailwind CSS**, **TanStack Query** 등의 최신 기술 스택을 사용하여 개발되었습니다.
 
 ## 프로젝트 url
-[todo 둘러보기](https://wanted-pre-onboarding-challenge-fe-27-eight.vercel.app/todos)
-
+[todo 둘러보기](https://wanted-pre-onboarding-challenge-fe-27-eight.vercel.app/todos/signup)
+회원가입 혹은 로그인 후 Todo페이지 접근 가능 (접속 초반 서버 장기 미접속으로 시간이 걸릴 수 있습니다.)
 ## 기능
 
 ### 주요 기능
@@ -16,10 +16,15 @@
 - **키워드 검색**: 작업 제목 또는 설명을 기준으로 실시간으로 키워드를 검색하여 관련 작업을 쉽게 찾을 수 있습니다.
 - **작업 추가 및 삭제**: 사용자는 새로운 작업을 추가하거나 불필요한 작업을 삭제할 수 있습니다.
 
+### 작업 예정 목록
+- 현재 로그인 상태 처리를 localStorage token으로 하고 있어 방법 변경 예정
+- 상태관리 라이브러리 적용
+- zod 라이브러리 적용  
+
 ## 기술 스택
 - **React**: UI 구성 및 상태 관리
 - **TypeScript**: 정적 타입 검사 및 코드 품질 향상
 - **Tailwind CSS**: 유틸리티 기반 CSS 프레임워크로 빠른 스타일링
 - **TanStack Query**: 서버 상태 관리 및 데이터 페칭을 위한 라이브러리
 
-현재 진행중인 프로젝트이며 미완성 상태입니다. 
+
